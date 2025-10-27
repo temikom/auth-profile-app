@@ -1,59 +1,26 @@
-{% extends 'base.html' %}
-{% block title %}Edit Project — {{ project.title }}{% endblock %}
-{% block content %}
-<div class="row justify-content-center">
-  <div class="col-lg-8">
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <h4 class="mb-3">Edit Project</h4>
-        <form method="post">
-          <div class="mb-3">
-            <label class="form-label">Title</label>
-            <input name="title" class="form-control" value="{{ project.title }}" required>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Description</label>
-            <textarea name="description" class="form-control" rows="4">{{ project.description }}</textarea>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Tech Stack (comma separated)</label>
-            <input name="tech_stack" class="form-control" value="{{ project.tech_stack }}">
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Feature Checklist (one per line)</label>
-            <textarea name="feature_checklist" class="form-control" rows="4">{{ project.feature_checklist }}</textarea>
-          </div>
-
-          <div class="mb-3 row">
-            <div class="col-md-8">
-              <label class="form-label">Deployment URL</label>
-              <input name="deployment_url" class="form-control" value="{{ project.deployment_url }}">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">Status</label>
-              <select name="status" class="form-select">
-                <option {% if project.status == 'Active' %}selected{% endif %}>Active</option>
-                <option {% if project.status == 'On Hold' %}selected{% endif %}>On Hold</option>
-                <option {% if project.status == 'Completed' %}selected{% endif %}>Completed</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" id="is_public" name="is_public" {% if project.is_public %}checked{% endif %}>
-            <label class="form-check-label" for="is_public">Public</label>
-          </div>
-
-          <div class="d-flex gap-2">
-            <button class="btn btn-primary">Save Changes</button>
-            <a href="{{ url_for('projects') }}" class="btn btn-outline-secondary">Cancel</a>
-          </div>
-        </form>
+<div class="modal fade" id="createProjectModal" tabindex="-1">
+  <div class="modal-dialog">
+    <form class="modal-content" method="POST" action="{{ url_for('create_project') }}">
+      <div class="modal-header">
+        <h5 class="modal-title">Create Project</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-    </div>
+
+      <div class="modal-body">
+        <input type="text" name="title" placeholder="Project Title" required class="form-control mb-2">
+        <textarea name="description" placeholder="Description" class="form-control mb-2"></textarea>
+        <input type="text" name="tech_stack" placeholder="Technologies (Python, Flask, etc)" class="form-control mb-2">
+        <input type="url" name="deployment_url" placeholder="Live URL (optional)" class="form-control mb-2">
+
+        <select name="visibility" class="form-control">
+            <option value="Public">Public</option>
+            <option value="Private">Private</option>
+        </select>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-primary">Save</button>
+      </div>
+    </form>
   </div>
 </div>
-{% endblock %}
