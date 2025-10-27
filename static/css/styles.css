@@ -1,59 +1,62 @@
-/* Global / theme */
-:root{
-  --accent: #1A73E8;
-  --muted: #6b7280;
-  --card-radius: 10px;
-  --shadow: 0 6px 18px rgba(15,23,42,0.06);
-  --avatar-bg: linear-gradient(135deg,#e8f0fe,#dbeafe);
-}
+@import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@400;700&display=swap');
 
 body {
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  background: #ffffff;
-  color: #0f172a;
+    font-family: 'Oxygen', sans-serif;
+    background: #f5f7fb;
+    margin: 0;
 }
 
-/* Navbar / header */
-.navbar-brand { font-weight: 700; letter-spacing: -0.2px; }
+.dashboard-container {
+    width: 90%;
+    margin: auto;
+}
 
-/* Buttons */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #4285F4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
 .btn-primary {
-  background-color: var(--accent);
-  border-color: var(--accent);
-}
-.btn-outline-primary {
-  color: var(--accent);
-  border-color: rgba(26,115,232,0.18);
-}
-
-/* Cards */
-.card {
-  border-radius: var(--card-radius);
-  box-shadow: var(--shadow);
-  border: 0;
+    background: #1a73e8;
+    color: white;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 6px;
 }
 
-/* Avatar initials (rounded-square) */
-.avatar-initials {
-  width:56px;
-  height:56px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:700;
-  color: #0f172a;
-  border-radius:12px;
-  background: var(--avatar-bg);
-  box-shadow: 0 4px 12px rgba(26,115,232,0.08);
-  font-size:18px;
+.project-card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 12px;
 }
 
-/* Small tweaks */
-.small.text-muted { color: #6b7280; }
-.form-control { border-radius: 8px; }
-.form-select { border-radius: 8px; }
+.project-actions {
+    display: flex;
+    gap: 10px;
+}
 
-/* Responsive helpers */
-@media (max-width: 991px) {
-  .avatar-initials { width:48px;height:48px;font-size:16px;border-radius:10px; }
+.btn-small {
+    background: #eee;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.btn-danger {
+    background: #ea4335;
+    color: white;
 }
