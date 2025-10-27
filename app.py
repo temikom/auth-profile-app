@@ -1,15 +1,16 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user, UserMixin
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-DB_PATH = os.path.join(BASE_DIR, "instance", "database.db")
+DB_FOLDER = os.path.join(BASE_DIR, "instance")
+DB_PATH = os.path.join(DB_FOLDER, "database.db")
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('FLASK_SECRET', 'replace-this-with-a-secure-secret')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + DB_PATH
+app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_PATH}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -35,10 +36,14 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-@app.before_first_request
-def create_db():
-    os.makedirs(os.path.join(BASE_DIR, "instance"), exist_ok=True)
-    db.create_all()
+@app.before_request
+def initialize_database():
+    """Ensure DB folder + tables exist, runs only once."""
+    if not os.path.exists(DB_FOLDER):
+        os.makedirs(DB_FOLDER, exist_ok=True)
+    if not hasattr(app, "db_initialized"):
+        db.create_all()
+        app.db_initialized = True
 
 
 @app.route("/")
@@ -52,6 +57,7 @@ def register():
         full_name = request.form.get("full_name", "").strip()
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
+
         if not email or not password:
             flash("Email and password are required.", "danger")
             return redirect(url_for("register"))
@@ -64,7 +70,8 @@ def register():
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
-        flash("Registration successful. Please log in.", "success")
+
+        flash("Registration successful! Please log in.", "success")
         return redirect(url_for("login"))
 
     return render_template("register.html")
@@ -75,14 +82,15 @@ def login():
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
+
         user = User.query.filter_by(email=email).first()
         if user and user.check_password(password):
             login_user(user)
-            flash("Logged in successfully.", "success")
-            next_page = request.args.get("next")
-            return redirect(next_page or url_for("dashboard"))
+            return redirect(url_for("dashboard"))
+
         flash("Invalid credentials.", "danger")
         return redirect(url_for("login"))
+
     return render_template("login.html")
 
 
@@ -96,11 +104,11 @@ def dashboard():
 @login_required
 def profile():
     if request.method == "POST":
-        full_name = request.form.get("full_name", "").strip()
-        current_user.full_name = full_name
+        current_user.full_name = request.form.get("full_name", "").strip()
         db.session.commit()
-        flash("Profile updated.", "success")
+        flash("Profile updated!", "success")
         return redirect(url_for("profile"))
+
     return render_template("profile.html", user=current_user)
 
 
