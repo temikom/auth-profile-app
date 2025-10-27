@@ -1,4 +1,59 @@
-/* small polish for clean-light UI */
-body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
-.card { border-radius: 8px; }
+/* Global / theme */
+:root{
+  --accent: #1A73E8;
+  --muted: #6b7280;
+  --card-radius: 10px;
+  --shadow: 0 6px 18px rgba(15,23,42,0.06);
+  --avatar-bg: linear-gradient(135deg,#e8f0fe,#dbeafe);
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: #ffffff;
+  color: #0f172a;
+}
+
+/* Navbar / header */
 .navbar-brand { font-weight: 700; letter-spacing: -0.2px; }
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+.btn-outline-primary {
+  color: var(--accent);
+  border-color: rgba(26,115,232,0.18);
+}
+
+/* Cards */
+.card {
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow);
+  border: 0;
+}
+
+/* Avatar initials (rounded-square) */
+.avatar-initials {
+  width:56px;
+  height:56px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  color: #0f172a;
+  border-radius:12px;
+  background: var(--avatar-bg);
+  box-shadow: 0 4px 12px rgba(26,115,232,0.08);
+  font-size:18px;
+}
+
+/* Small tweaks */
+.small.text-muted { color: #6b7280; }
+.form-control { border-radius: 8px; }
+.form-select { border-radius: 8px; }
+
+/* Responsive helpers */
+@media (max-width: 991px) {
+  .avatar-initials { width:48px;height:48px;font-size:16px;border-radius:10px; }
+}
